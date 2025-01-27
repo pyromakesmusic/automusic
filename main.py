@@ -40,6 +40,55 @@ diatonic_modes = {
     "Locrian": [0, 1, 3, 5, 6, 8, 10]
 }
 
+diatonic_triads = {
+    "I": [0, 4, 7],      # Major triad
+    "ii": [2, 5, 9],     # Minor triad
+    "iii": [4, 7, 11],   # Minor triad
+    "IV": [5, 9, 0],     # Major triad
+    "V": [7, 11, 2],     # Major triad
+    "vi": [9, 0, 4],     # Minor triad
+    "vii°": [11, 2, 5]   # Diminished triad
+}
+
+diatonic_sevenths = {
+    "Imaj7": [0, 4, 7, 11],     # Major seventh
+    "ii7": [2, 5, 9, 0],        # Minor seventh
+    "iii7": [4, 7, 11, 2],      # Minor seventh
+    "IVmaj7": [5, 9, 0, 4],     # Major seventh
+    "V7": [7, 11, 2, 5],        # Dominant seventh
+    "vi7": [9, 0, 4, 7],        # Minor seventh
+    "viiø7": [11, 2, 5, 9]      # Half-diminished seventh
+}
+
+diatonic_ninths = {
+    "Imaj9": [0, 4, 7, 11, 2],      # Major ninth
+    "ii9": [2, 5, 9, 0, 4],         # Minor ninth
+    "iii9": [4, 7, 11, 2, 5],       # Minor ninth
+    "IVmaj9": [5, 9, 0, 4, 7],      # Major ninth
+    "V9": [7, 11, 2, 5, 9],         # Dominant ninth
+    "vi9": [9, 0, 4, 7, 11],        # Minor ninth
+    "viiø9": [11, 2, 5, 9, 0]       # Half-diminished ninth
+}
+
+diatonic_sus2 = {
+    "I sus2": [0, 2, 7],      # Suspended second on the tonic
+    "ii sus2": [2, 4, 9],     # Suspended second on the second degree
+    "iii sus2": [4, 6, 11],   # Suspended second on the third degree
+    "IV sus2": [5, 7, 0],     # Suspended second on the fourth degree
+    "V sus2": [7, 9, 2],      # Suspended second on the fifth degree
+    "vi sus2": [9, 11, 4],    # Suspended second on the sixth degree
+    "vii° sus2": [11, 1, 5]   # Suspended second on the seventh degree
+}
+
+diatonic_sus4 = {
+    "I sus4": [0, 5, 7],      # Suspended fourth on the tonic
+    "ii sus4": [2, 7, 9],     # Suspended fourth on the second degree
+    "iii sus4": [4, 9, 11],   # Suspended fourth on the third degree
+    "IV sus4": [5, 0, 7],     # Suspended fourth on the fourth degree
+    "V sus4": [7, 2, 9],      # Suspended fourth on the fifth degree
+    "vi sus4": [9, 4, 11],    # Suspended fourth on the sixth degree
+    "vii° sus4": [11, 5, 0]   # Suspended fourth on the seventh degree
+}
 # Merge triads and sevenths into one dictionary of chords
 chords = {**triads, **sevenths}
 
