@@ -23,6 +23,23 @@ sevenths = {
     'Bm7b5': ['B', 'D', 'F', 'A']
 }
 
+midi_notes = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#", 11: "B"}
+
+# Turn integer 0-255 into the note it represents
+def get_note(number):
+    note = midi_notes[number % 12]
+    return note
+
+diatonic_modes = {
+    "Ionian": [0, 2, 4, 5, 7, 9, 11],      # Major scale
+    "Dorian": [0, 2, 3, 5, 7, 9, 10],
+    "Phrygian": [0, 1, 3, 5, 7, 8, 10],
+    "Lydian": [0, 2, 4, 6, 7, 9, 11],
+    "Mixolydian": [0, 2, 4, 5, 7, 9, 10],
+    "Aeolian": [0, 2, 3, 5, 7, 8, 10],    # Natural minor scale
+    "Locrian": [0, 1, 3, 5, 6, 8, 10]
+}
+
 # Merge triads and sevenths into one dictionary of chords
 chords = {**triads, **sevenths}
 
