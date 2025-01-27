@@ -24,6 +24,9 @@ sevenths = {
 }
 
 midi_notes = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#", 11: "B"}
+# Assuming midi_notes is defined as a list of note names
+text_midi_notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+
 
 # Turn integer 0-255 into the note it represents
 def get_note(number):
@@ -33,8 +36,8 @@ def get_note(number):
 def note_to_number(note):
     """Convert a note name to its corresponding MIDI number."""
     # Find the index of the note in midi_notes
-    if note in midi_notes:
-        return midi_notes.index(note)
+    if note in text_midi_notes:
+        return text_midi_notes.index(note)
     else:
         raise ValueError(f"Invalid note: {note}")
 
@@ -80,7 +83,7 @@ diatonic_ninths = {
 
 diatonic_sus2 = {
     "Isus2": [0, 2, 7],      # Suspended second on the tonic
-    "ii sus2": [2, 4, 9],     # Suspended second on the second degree
+    "iisus2": [2, 4, 9],     # Suspended second on the second degree
     "iiisus2": [4, 6, 11],   # Suspended second on the third degree
     "IVsus2": [5, 7, 0],     # Suspended second on the fourth degree
     "Vsus2": [7, 9, 2],      # Suspended second on the fifth degree
@@ -117,11 +120,11 @@ def create_shared_notes_graph(chords):
         return len(set(chords[chord1]).intersection(set(chords[chord2])))
 
     # Create the graph
-    G = nx.Graph()
+    graf = nx.Graph()
 
     # Add nodes for each chord
     for chord in chords.keys():
-        G.add_node(chord)
+        graf.add_node(chord)
 
     # Add weighted edges based on shared notes
     for chord1 in chords:
@@ -129,9 +132,9 @@ def create_shared_notes_graph(chords):
             if chord1 != chord2:
                 weight = shared_notes(chord1, chord2)
                 if weight > 0:
-                    G.add_edge(chord1, chord2, weight=weight)
+                    graf.add_edge(chord1, chord2, weight=weight)
 
-    return G
+    return graf
 
 def graph_network(graf):
     # Plot the graph (optional)

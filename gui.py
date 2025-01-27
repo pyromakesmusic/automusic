@@ -9,7 +9,40 @@ def on_generate():
     num_chords = num_chords_var.get()
     print(f"Key: {selected_key}, Mode: {selected_mode}, Number of Chords: {num_chords}")
 
+    music_key = automusic.note_to_number(selected_key)
+    mode_numbers = automusic.diatonic_modes[selected_mode]
+
+    # Add root_number to each element in mode_numbers and ensure it wraps around (mod 12)
+    transposed_mode = [(music_key + interval) for interval in mode_numbers]
+
+
+    # Select chord types
+    chords = {**automusic.diatonic_triads, **automusic.diatonic_sevenths, **automusic.diatonic_ninths,
+              **automusic.diatonic_sus2, **automusic.diatonic_sus4}
+
+    # Generate the chords for the mode by starting from the scale degree
+    mode_chords = []
+    for degree in range(len(transposed_mode)):
+        scale_degree = transposed_mode[degree]
+
+        # Look up the chord for this scale degree from the chords dictionary
+        # Assuming the chord dictionary is named 'chords' and has keys like "I", "II", etc.
+        chord_key = str(degree + 1)  # Chord keys in the dictionary are "1", "2", etc.
+
+        if chord_key in chords:  # Make sure the chord exists in your chords dictionary
+            chord_intervals = chords[chord_key]  # e.g., [0, 4, 7] for a major triad
+            chord_notes = [(scale_degree + interval) % 12 for interval in chord_intervals]
+            mode_chords.append(chord_notes)
+
+    print(f"Key: {selected_key}, Mode: {selected_mode}, Chords: {mode_chords}, Number of Chords: {num_chords}")
+
+    graf = automusic.create_shared_notes_graph(mode_chords)
     # Add your logic here to process these inputs.
+
+    automusic.graph_network(graf)
+
+    # need to figure out how to select a random node
+    # automusic.random_walk(graf)
 
 # Create the main tkinter window
 root = tk.Tk()
@@ -35,8 +68,8 @@ mode_label = ttk.Label(root, text="Select a Mode:")
 mode_label.grid(row=1, column=0, padx=5, pady=5, sticky="w")
 
 mode_options = [
-    "Ionian (Major)", "Dorian", "Phrygian", "Lydian",
-    "Mixolydian", "Aeolian (Minor)", "Locrian"
+    "Ionian", "Dorian", "Phrygian", "Lydian",
+    "Mixolydian", "Aeolian", "Locrian"
 ]
 mode_menu = ttk.OptionMenu(root, mode_var, mode_options[0], *mode_options)
 mode_menu.grid(row=1, column=1, padx=5, pady=5, sticky="w")
