@@ -30,6 +30,14 @@ def get_note(number):
     note = midi_notes[number % 12]
     return note
 
+def note_to_number(note):
+    """Convert a note name to its corresponding MIDI number."""
+    # Find the index of the note in midi_notes
+    if note in midi_notes:
+        return midi_notes.index(note)
+    else:
+        raise ValueError(f"Invalid note: {note}")
+
 diatonic_modes = {
     "Ionian": [0, 2, 4, 5, 7, 9, 11],      # Major scale
     "Dorian": [0, 2, 3, 5, 7, 9, 10],
