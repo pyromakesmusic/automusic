@@ -152,7 +152,7 @@ def random_walk(graph, start_node, num_steps=10):
 
 
 # Generate a random chord progression starting from C
-def make_progression(graf):
-    progression = random_walk(graf, 'C', num_steps=10)
+def make_progression(graf, num):
+    progression = random_walk(graf, 'C', num_steps=num)
     print("Random Chord Progression:", progression)
     return progression
