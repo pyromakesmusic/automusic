@@ -14,6 +14,7 @@ def on_generate():
 
     # Add root_number to each element in mode_numbers and ensure it wraps around (mod 12)
     transposed_mode = [(music_key + interval) for interval in mode_numbers]
+    print(transposed_mode)
 
 
     # Select chord types
@@ -23,7 +24,9 @@ def on_generate():
     # Generate the chords for the mode by starting from the scale degree
     mode_chords = []
     for degree in range(len(transposed_mode)):
+        print(degree)
         scale_degree = transposed_mode[degree]
+        print(scale_degree)
 
         # Look up the chord for this scale degree from the chords dictionary
         # Assuming the chord dictionary is named 'chords' and has keys like "I", "II", etc.
