@@ -7,39 +7,34 @@ def on_generate():
     selected_key = key_var.get()
     selected_mode = mode_var.get()
     num_chords = num_chords_var.get()
-    print(f"Key: {selected_key}, Mode: {selected_mode}, Number of Chords: {num_chords}")
 
     music_key = automusic.note_to_number(selected_key)
     mode_numbers = automusic.diatonic_modes[selected_mode]
 
     # Add root_number to each element in mode_numbers and ensure it wraps around (mod 12)
     transposed_mode = [(music_key + interval) for interval in mode_numbers]
-    print(transposed_mode)
 
 
     # Select chord types
-    chords = {**automusic.diatonic_triads, **automusic.diatonic_sevenths, **automusic.diatonic_ninths,
-              **automusic.diatonic_sus2, **automusic.diatonic_sus4}
+    selected_chords_dicts = [automusic.diatonic_triads, automusic.diatonic_sevenths, automusic.diatonic_ninths,
+              automusic.diatonic_sus2, automusic.diatonic_sus4]
 
-    print(chords.keys())
 
     # Generate the chords for the mode by starting from the scale degree
-    mode_chords = []
+    mode_chords = {}
     for degree in range(len(transposed_mode)):
-        print(degree)
         scale_degree = transposed_mode[degree]
-        print(scale_degree)
 
-        # Look up the chord for this scale degree from the chords dictionary
-        # Assuming the chord dictionary is named 'chords' and has keys like "I", "II", etc.
-        chord_key = str(degree + 1)  # Chord keys in the dictionary are "1", "2", etc.
+        # Iterate through each selected chord dictionary
+        for chord_dict in selected_chords_dicts:  # This list contains the selected chord dictionaries (triads, sevenths, etc.)
+            chord_key = list(chord_dict.keys())[degree]  # Get the chord corresponding to this scale degree
 
-        if chord_key in chords:  # Make sure the chord exists in your chords dictionary
-            chord_intervals = chords[chord_key]  # e.g., [0, 4, 7] for a major triad
-            chord_notes = [(scale_degree + interval) % 12 for interval in chord_intervals]
-            mode_chords.append(chord_notes)
+            if chord_key in chord_dict:  # Check if the chord exists in the current dictionary
+                chord_intervals = chord_dict[chord_key]  # Get the intervals for the chord (e.g., [0, 4, 7] for a triad)
+                chord_notes = [(scale_degree + interval) % 12 for interval in
+                               chord_intervals]  # Generate the chord notes
+                mode_chords[chord_key] = chord_notes  # Add the chord notes to the mode_chords list
 
-    print(f"Key: {selected_key}, Mode: {selected_mode}, Chords: {mode_chords}, Number of Chords: {num_chords}")
 
     graf = automusic.create_shared_notes_graph(mode_chords)
     # Add your logic here to process these inputs.
@@ -47,7 +42,9 @@ def on_generate():
     automusic.graph_network(graf)
 
     # need to figure out how to select a random node
-    # automusic.random_walk(graf)
+    walk = automusic.random_walk(graf, "Imaj7", num_chords)
+
+    print("Random Walk: " + str(automusic.walk_translator(walk, mode_chords)))
 
 # Create the main tkinter window
 root = tk.Tk()

@@ -136,14 +136,15 @@ def create_shared_notes_graph(chords):
 
     return graf
 
-def graph_network(graf):
+def graph_network(graf, showing=False):
     # Plot the graph (optional)
     plt.figure(figsize=(10, 8))
     pos = nx.spring_layout(graf, seed=42)
     nx.draw(graf, pos, with_labels=True, node_color='lightblue', font_weight='bold')
     labels = nx.get_edge_attributes(graf, 'weight')
     nx.draw_networkx_edge_labels(graf, pos, edge_labels=labels)
-    plt.show()
+    if showing:
+        plt.show()
 
 
 # Perform a random walk on the graph
@@ -162,9 +163,9 @@ def random_walk(graph, start_node, num_steps=10):
 
     return walk
 
+def walk_translator(walkies, chords):
+    translation = {}
+    for step in walkies:
+        translation[step] = chords[step]
 
-# Generate a random chord progression starting from C
-def make_progression(graf, num):
-    progression = random_walk(graf, 'C', num_steps=num)
-    print("Random Chord Progression:", progression)
-    return progression
+    return translation
