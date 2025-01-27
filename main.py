@@ -71,47 +71,59 @@ diatonic_ninths = {
 }
 
 diatonic_sus2 = {
-    "I sus2": [0, 2, 7],      # Suspended second on the tonic
+    "Isus2": [0, 2, 7],      # Suspended second on the tonic
     "ii sus2": [2, 4, 9],     # Suspended second on the second degree
-    "iii sus2": [4, 6, 11],   # Suspended second on the third degree
-    "IV sus2": [5, 7, 0],     # Suspended second on the fourth degree
-    "V sus2": [7, 9, 2],      # Suspended second on the fifth degree
-    "vi sus2": [9, 11, 4],    # Suspended second on the sixth degree
-    "vii° sus2": [11, 1, 5]   # Suspended second on the seventh degree
+    "iiisus2": [4, 6, 11],   # Suspended second on the third degree
+    "IVsus2": [5, 7, 0],     # Suspended second on the fourth degree
+    "Vsus2": [7, 9, 2],      # Suspended second on the fifth degree
+    "visus2": [9, 11, 4],    # Suspended second on the sixth degree
+    "vii°sus2": [11, 1, 5]   # Suspended second on the seventh degree
 }
 
 diatonic_sus4 = {
-    "I sus4": [0, 5, 7],      # Suspended fourth on the tonic
-    "ii sus4": [2, 7, 9],     # Suspended fourth on the second degree
-    "iii sus4": [4, 9, 11],   # Suspended fourth on the third degree
-    "IV sus4": [5, 0, 7],     # Suspended fourth on the fourth degree
-    "V sus4": [7, 2, 9],      # Suspended fourth on the fifth degree
-    "vi sus4": [9, 4, 11],    # Suspended fourth on the sixth degree
-    "vii° sus4": [11, 5, 0]   # Suspended fourth on the seventh degree
+    "Isus4": [0, 5, 7],      # Suspended fourth on the tonic
+    "iisus4": [2, 7, 9],     # Suspended fourth on the second degree
+    "iiisus4": [4, 9, 11],   # Suspended fourth on the third degree
+    "IVsus4": [5, 0, 7],     # Suspended fourth on the fourth degree
+    "Vsus4": [7, 2, 9],      # Suspended fourth on the fifth degree
+    "visus4": [9, 4, 11],    # Suspended fourth on the sixth degree
+    "vii°sus4": [11, 5, 0]   # Suspended fourth on the seventh degree
 }
 # Merge triads and sevenths into one dictionary of chords
 chords = {**triads, **sevenths}
 
+def create_shared_notes_graph(chords):
+    """
+    Create a graph where nodes represent chords, and edges are weighted
+    by the number of shared notes between chords.
 
-# Calculate the number of shared notes between each pair of chords
-def shared_notes(chord1, chord2):
-    return len(set(chords[chord1]).intersection(set(chords[chord2])))
+    Parameters:
+        chords (dict): A dictionary where keys are chord names and values are lists of notes
+                      (integers representing semitones from the root).
 
+    Returns:
+        networkx.Graph: The resulting graph with nodes and weighted edges.
+    """
+    # Function to calculate the number of shared notes between two chords
+    def shared_notes(chord1, chord2):
+        return len(set(chords[chord1]).intersection(set(chords[chord2])))
 
-# Create the graph
-G = nx.Graph()
+    # Create the graph
+    G = nx.Graph()
 
-# Add nodes for each chord
-for chord in chords.keys():
-    G.add_node(chord)
+    # Add nodes for each chord
+    for chord in chords.keys():
+        G.add_node(chord)
 
-# Add weighted edges based on shared notes
-for chord1 in chords:
-    for chord2 in chords:
-        if chord1 != chord2:
-            weight = shared_notes(chord1, chord2)
-            if weight > 0:
-                G.add_edge(chord1, chord2, weight=weight)
+    # Add weighted edges based on shared notes
+    for chord1 in chords:
+        for chord2 in chords:
+            if chord1 != chord2:
+                weight = shared_notes(chord1, chord2)
+                if weight > 0:
+                    G.add_edge(chord1, chord2, weight=weight)
+
+    return G
 
 # Plot the graph (optional)
 plt.figure(figsize=(10, 8))
@@ -140,5 +152,7 @@ def random_walk(graph, start_node, num_steps=10):
 
 
 # Generate a random chord progression starting from C
-progression = random_walk(G, 'C', num_steps=10)
-print("Random Chord Progression:", progression)
+def make_progression(graf):
+    progression = random_walk(graf, 'C', num_steps=10)
+    print("Random Chord Progression:", progression)
+    return progression
