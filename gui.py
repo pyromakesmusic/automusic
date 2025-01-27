@@ -21,6 +21,8 @@ def on_generate():
     chords = {**automusic.diatonic_triads, **automusic.diatonic_sevenths, **automusic.diatonic_ninths,
               **automusic.diatonic_sus2, **automusic.diatonic_sus4}
 
+    print(chords.keys())
+
     # Generate the chords for the mode by starting from the scale degree
     mode_chords = []
     for degree in range(len(transposed_mode)):
@@ -56,6 +58,14 @@ key_var = tk.StringVar()
 mode_var = tk.StringVar()
 num_chords_var = tk.IntVar()
 
+
+# Chord type checkboxes
+triads_var = tk.BooleanVar(value=True)  # Default value set to True
+sevenths_var = tk.BooleanVar(value=True)
+ninths_var = tk.BooleanVar(value=True)
+sus2_var = tk.BooleanVar(value=False)  # Default set to False
+sus4_var = tk.BooleanVar(value=False)
+
 # Key selection
 key_label = ttk.Label(root, text="Select a Key:")
 key_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
@@ -86,9 +96,27 @@ num_chords_spinbox = ttk.Spinbox(
 )
 num_chords_spinbox.grid(row=2, column=1, padx=5, pady=5, sticky="w")
 
+
+# Add checkboxes for chord types
+triads_checkbox = tk.Checkbutton(root, text="Triads", variable=triads_var)
+triads_checkbox.grid(row=3, column=0, sticky="w")
+
+sevenths_checkbox = tk.Checkbutton(root, text="Sevenths", variable=sevenths_var)
+sevenths_checkbox.grid(row=4, column=0, sticky="w")
+
+ninths_checkbox = tk.Checkbutton(root, text="Ninths", variable=ninths_var)
+ninths_checkbox.grid(row=5, column=0, sticky="w")
+
+sus2_checkbox = tk.Checkbutton(root, text="Suspended 2", variable=sus2_var)
+sus2_checkbox.grid(row=6, column=0, sticky="w")
+
+sus4_checkbox = tk.Checkbutton(root, text="Suspended 4", variable=sus4_var)
+sus4_checkbox.grid(row=7, column=0, sticky="w")
+
+
 # Generate button
 generate_button = ttk.Button(root, text="Generate", command=on_generate)
-generate_button.grid(row=3, column=0, columnspan=2, pady=10)
+generate_button.grid(row=8, column=3, rowspan=3, columnspan=4, sticky="w")
 
 # Run the tkinter event loop
 root.mainloop()
