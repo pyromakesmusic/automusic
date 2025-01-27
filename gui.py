@@ -8,7 +8,7 @@ def on_generate():
     selected_mode = mode_var.get()
     num_chords = num_chords_var.get()
     print(f"Key: {selected_key}, Mode: {selected_mode}, Number of Chords: {num_chords}")
-    
+
     # Add your logic here to process these inputs.
 
 # Create the main tkinter window

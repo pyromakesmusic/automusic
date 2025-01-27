@@ -125,13 +125,14 @@ def create_shared_notes_graph(chords):
 
     return G
 
-# Plot the graph (optional)
-plt.figure(figsize=(10, 8))
-pos = nx.spring_layout(G, seed=42)
-nx.draw(G, pos, with_labels=True, node_color='lightblue', font_weight='bold')
-labels = nx.get_edge_attributes(G, 'weight')
-nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
-plt.show()
+def graph_network(graf):
+    # Plot the graph (optional)
+    plt.figure(figsize=(10, 8))
+    pos = nx.spring_layout(graf, seed=42)
+    nx.draw(graf, pos, with_labels=True, node_color='lightblue', font_weight='bold')
+    labels = nx.get_edge_attributes(graf, 'weight')
+    nx.draw_networkx_edge_labels(graf, pos, edge_labels=labels)
+    plt.show()
 
 
 # Perform a random walk on the graph
