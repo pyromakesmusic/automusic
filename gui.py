@@ -1,23 +1,24 @@
-import automusic
+import automusic as amsc
 import tkinter as tk
 from tkinter import ttk
 
+#def on_generate(triads, sevenths, ninths, sus2, sus4):
 def on_generate():
     """Function to handle the 'Generate' button click."""
     selected_key = key_var.get()
     selected_mode = mode_var.get()
     num_chords = num_chords_var.get()
 
-    music_key = automusic.note_to_number(selected_key)
-    mode_numbers = automusic.diatonic_modes[selected_mode]
+    music_key = amsc.note_to_number(selected_key)
+    mode_numbers = amsc.diatonic_modes[selected_mode]
 
     # Add root_number to each element in mode_numbers and ensure it wraps around (mod 12)
     transposed_mode = [(music_key + interval) for interval in mode_numbers]
 
 
     # Select chord types
-    selected_chords_dicts = [automusic.diatonic_triads, automusic.diatonic_sevenths, automusic.diatonic_ninths,
-              automusic.diatonic_sus2, automusic.diatonic_sus4]
+    selected_chords_dicts = [amsc.diatonic_triads, amsc.diatonic_sevenths, amsc.diatonic_ninths,
+              amsc.diatonic_sus2, amsc.diatonic_sus4]
 
 
     # Generate the chords for the mode by starting from the scale degree
@@ -36,15 +37,15 @@ def on_generate():
                 mode_chords[chord_key] = chord_notes  # Add the chord notes to the mode_chords list
 
 
-    graf = automusic.create_shared_notes_graph(mode_chords)
+    graf = amsc.create_shared_notes_graph(mode_chords)
     # Add your logic here to process these inputs.
 
-    automusic.graph_network(graf)
+    amsc.graph_network(graf)
 
     # need to figure out how to select a random node
-    walk = automusic.random_walk(graf, "Imaj7", num_chords)
+    walk = amsc.random_walk(graf, "Imaj7", num_chords)
 
-    print("Random Walk: " + str(automusic.walk_translator(walk, mode_chords)))
+    print("Random Walk: " + str(amsc.walk_translator(walk, mode_chords)))
 
 # Create the main tkinter window
 root = tk.Tk()
