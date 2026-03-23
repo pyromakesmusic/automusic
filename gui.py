@@ -1,6 +1,10 @@
+# Local libraries imports
 import automusic as amsc
+
+# Standard libraries imports
 import tkinter as tk
 from tkinter import ttk
+import pandas as pd
 
 #def on_generate(triads, sevenths, ninths, sus2, sus4):
 def on_generate():
@@ -13,12 +17,26 @@ def on_generate():
     mode_numbers = amsc.diatonic_modes[selected_mode]
 
     # Add root_number to each element in mode_numbers and ensure it wraps around (mod 12)
-    transposed_mode = [(music_key + interval) for interval in mode_numbers]
+    transposed_mode = [(music_key + interval) % 12 for interval in mode_numbers]
 
 
     # Select chord types
-    selected_chords_dicts = [amsc.diatonic_triads, amsc.diatonic_sevenths, amsc.diatonic_ninths,
-              amsc.diatonic_sus2, amsc.diatonic_sus4]
+    selected_chords_dicts = []
+
+    if triads_var.get():
+        selected_chords_dicts.append(amsc.diatonic_triads)
+
+    if sevenths_var.get():
+        selected_chords_dicts.append(amsc.diatonic_sevenths)
+
+    if ninths_var.get():
+        selected_chords_dicts.append(amsc.diatonic_ninths)
+
+    if sus2_var.get():
+        selected_chords_dicts.append(amsc.diatonic_sus2)
+
+    if sus4_var.get():
+        selected_chords_dicts.append(amsc.diatonic_sus4)
 
 
     # Generate the chords for the mode by starting from the scale degree
@@ -43,7 +61,7 @@ def on_generate():
     amsc.graph_network(graf)
 
     # need to figure out how to select a random node
-    walk = amsc.random_walk(graf, "Imaj7", num_chords)
+    walk = amsc.random_walk(graf, "vi", num_chords)
 
     print("Random Walk: " + str(amsc.walk_translator(walk, mode_chords)))
 
