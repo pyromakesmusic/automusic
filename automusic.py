@@ -2,8 +2,8 @@ import random
 import networkx as nx
 import matplotlib.pyplot as plt
 
-# Define diatonic triads and seventh chords in C major
-triads = {
+# Define diatonic TRIADS and seventh chords in C major
+TRIADS = {
     'C': ['C', 'E', 'G'],
     'Dm': ['D', 'F', 'A'],
     'Em': ['E', 'G', 'B'],
@@ -13,7 +13,7 @@ triads = {
     'Bdim': ['B', 'D', 'F']
 }
 
-sevenths = {
+SEVENTHS = {
     'Cmaj7': ['C', 'E', 'G', 'B'],
     'Dm7': ['D', 'F', 'A', 'C'],
     'Em7': ['E', 'G', 'B', 'D'],
@@ -23,25 +23,25 @@ sevenths = {
     'Bm7b5': ['B', 'D', 'F', 'A']
 }
 
-midi_notes = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#", 11: "B"}
-# Assuming midi_notes is defined as a list of note names
-text_midi_notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+MIDI_NOTES = {0: "C", 1: "C#", 2: "D", 3: "D#", 4: "E", 5: "F", 6: "F#", 7: "G", 8: "G#", 9: "A", 10: "A#", 11: "B"}
+# Assuming MIDI_NOTES is defined as a list of note names
+TEXT_MIDI_NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 
 # Turn integer 0-255 into the note it represents
 def get_note(number):
-    note = midi_notes[number % 12]
+    note = MIDI_NOTES[number % 12]
     return note
 
 def note_to_number(note):
     """Convert a note name to its corresponding MIDI number."""
-    # Find the index of the note in midi_notes
-    if note in text_midi_notes:
-        return text_midi_notes.index(note)
+    # Find the index of the note in MIDI_NOTES
+    if note in TEXT_MIDI_NOTES:
+        return TEXT_MIDI_NOTES.index(note)
     else:
         raise ValueError(f"Invalid note: {note}")
 
-diatonic_modes = {
+DIATONIC_MODES = {
     "Ionian": [0, 2, 4, 5, 7, 9, 11],      # Major scale
     "Dorian": [0, 2, 3, 5, 7, 9, 10],
     "Phrygian": [0, 1, 3, 5, 7, 8, 10],
@@ -51,7 +51,7 @@ diatonic_modes = {
     "Locrian": [0, 1, 3, 5, 6, 8, 10]
 }
 
-diatonic_triads = {
+DIATONIC_TRIADS = {
     "I": [0, 4, 7],      # Major triad
     "ii": [2, 5, 9],     # Minor triad
     "iii": [4, 7, 11],   # Minor triad
@@ -61,7 +61,7 @@ diatonic_triads = {
     "vii°": [11, 2, 5]   # Diminished triad
 }
 
-diatonic_sevenths = {
+DIATONIC_SEVENTHS = {
     "Imaj7": [0, 4, 7, 11],     # Major seventh
     "ii7": [2, 5, 9, 0],        # Minor seventh
     "iii7": [4, 7, 11, 2],      # Minor seventh
@@ -71,7 +71,7 @@ diatonic_sevenths = {
     "viiø7": [11, 2, 5, 9]      # Half-diminished seventh
 }
 
-diatonic_ninths = {
+DIATONIC_NINTHS = {
     "Imaj9": [0, 4, 7, 11, 2],      # Major ninth
     "ii9": [2, 5, 9, 0, 4],         # Minor ninth
     "iii9": [4, 7, 11, 2, 5],       # Minor ninth
@@ -81,7 +81,7 @@ diatonic_ninths = {
     "viiø9": [11, 2, 5, 9, 0]       # Half-diminished ninth
 }
 
-diatonic_sus2 = {
+DIATONIC_SUS2 = {
     "Isus2": [0, 2, 7],      # Suspended second on the tonic
     "iisus2": [2, 4, 9],     # Suspended second on the second degree
     "iiisus2": [4, 6, 11],   # Suspended second on the third degree
@@ -91,7 +91,7 @@ diatonic_sus2 = {
     "vii°sus2": [11, 1, 5]   # Suspended second on the seventh degree
 }
 
-diatonic_sus4 = {
+DIATONIC_SUS4 = {
     "Isus4": [0, 5, 7],      # Suspended fourth on the tonic
     "iisus4": [2, 7, 9],     # Suspended fourth on the second degree
     "iiisus4": [4, 9, 11],   # Suspended fourth on the third degree
@@ -100,8 +100,17 @@ diatonic_sus4 = {
     "visus4": [9, 4, 11],    # Suspended fourth on the sixth degree
     "vii°sus4": [11, 5, 0]   # Suspended fourth on the seventh degree
 }
-# Merge triads and sevenths into one dictionary of chords
-chords = {**triads, **sevenths}
+# Merge TRIADS and SEVENTHS into one dictionary of chords
+chords = {**TRIADS, **SEVENTHS}
+
+MODE_OPTIONS = [
+    "Ionian", "Dorian", "Phrygian", "Lydian",
+    "Mixolydian", "Aeolian", "Locrian"
+]
+
+KEY_OPTIONS = [
+    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+]
 
 def create_shared_notes_graph(chords):
     """

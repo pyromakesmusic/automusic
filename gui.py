@@ -7,7 +7,6 @@ from tkinter import ttk
 import pandas as pd
 import random
 
-#def on_generate(triads, sevenths, ninths, sus2, sus4):
 def on_generate():
     """Function to handle the 'Generate' button click."""
     selected_key = key_var.get()
@@ -15,7 +14,7 @@ def on_generate():
     num_chords = num_chords_var.get()
 
     music_key = amsc.note_to_number(selected_key)
-    mode_numbers = amsc.diatonic_modes[selected_mode]
+    mode_numbers = amsc.DIATONIC_MODES[selected_mode]
 
     # Add root_number to each element in mode_numbers and ensure it wraps around (mod 12)
     transposed_mode = [(music_key + interval) % 12 for interval in mode_numbers]
@@ -25,19 +24,19 @@ def on_generate():
     selected_chords_dicts = []
 
     if triads_var.get():
-        selected_chords_dicts.append(amsc.diatonic_triads)
+        selected_chords_dicts.append(amsc.DIATONIC_TRIADS)
 
     if sevenths_var.get():
-        selected_chords_dicts.append(amsc.diatonic_sevenths)
+        selected_chords_dicts.append(amsc.DIATONIC_SEVENTHS)
 
     if ninths_var.get():
-        selected_chords_dicts.append(amsc.diatonic_ninths)
+        selected_chords_dicts.append(amsc.DIATONIC_NINTHS)
 
     if sus2_var.get():
-        selected_chords_dicts.append(amsc.diatonic_sus2)
+        selected_chords_dicts.append(amsc.DIATONIC_SUS2)
 
     if sus4_var.get():
-        selected_chords_dicts.append(amsc.diatonic_sus4)
+        selected_chords_dicts.append(amsc.DIATONIC_SUS4)
 
 
     # Generate the chords for the mode by starting from the scale degree
@@ -46,7 +45,7 @@ def on_generate():
         scale_degree = transposed_mode[degree]
 
         # Iterate through each selected chord dictionary
-        for chord_dict in selected_chords_dicts:  # This list contains the selected chord dictionaries (triads, sevenths, etc.)
+        for chord_dict in selected_chords_dicts:  # This list contains the selected chord dictionaries (TRIADS, SEVENTHS, etc.)
             chord_key = list(chord_dict.keys())[degree]  # Get the chord corresponding to this scale degree
 
             if chord_key in chord_dict:  # Check if the chord exists in the current dictionary
@@ -88,21 +87,16 @@ sus4_var = tk.BooleanVar(value=False)
 key_label = ttk.Label(root, text="Select a Key:")
 key_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
 
-key_options = [
-    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-]
-key_menu = ttk.OptionMenu(root, key_var, key_options[0], *key_options)
+
+key_menu = ttk.OptionMenu(root, key_var, amsc.KEY_OPTIONS[0], *amsc.KEY_OPTIONS)
 key_menu.grid(row=0, column=1, padx=5, pady=5, sticky="w")
 
 # Mode selection
 mode_label = ttk.Label(root, text="Select a Mode:")
 mode_label.grid(row=1, column=0, padx=5, pady=5, sticky="w")
 
-mode_options = [
-    "Ionian", "Dorian", "Phrygian", "Lydian",
-    "Mixolydian", "Aeolian", "Locrian"
-]
-mode_menu = ttk.OptionMenu(root, mode_var, mode_options[0], *mode_options)
+
+mode_menu = ttk.OptionMenu(root, mode_var, amsc.MODE_OPTIONS[0], *amsc.MODE_OPTIONS)
 mode_menu.grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
 # Number of chords selection
