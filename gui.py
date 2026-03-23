@@ -63,7 +63,7 @@ def on_generate():
 
     # need to figure out how to select a random node
     start_node = random.choice(list(graf.nodes))
-    walk = amsc.random_walk(graf, "vi", num_chords)
+    walk = amsc.random_walk(graf, start_node, num_chords)
 
     print("Random Walk: " + str(amsc.walk_translator(walk, mode_chords)))
 
