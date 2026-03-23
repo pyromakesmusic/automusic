@@ -5,6 +5,7 @@ import automusic as amsc
 import tkinter as tk
 from tkinter import ttk
 import pandas as pd
+import random
 
 #def on_generate(triads, sevenths, ninths, sus2, sus4):
 def on_generate():
@@ -61,6 +62,7 @@ def on_generate():
     amsc.graph_network(graf)
 
     # need to figure out how to select a random node
+    start_node = random.choice(list(graf.nodes))
     walk = amsc.random_walk(graf, "vi", num_chords)
 
     print("Random Walk: " + str(amsc.walk_translator(walk, mode_chords)))
@@ -72,7 +74,7 @@ root.title("Chord Generator")
 # Variables for user selections
 key_var = tk.StringVar()
 mode_var = tk.StringVar()
-num_chords_var = tk.IntVar()
+num_chords_var = tk.IntVar(value=4)
 
 
 # Chord type checkboxes
