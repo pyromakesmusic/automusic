@@ -1,6 +1,7 @@
 import random
 import networkx as nx
 import matplotlib.pyplot as plt
+import mido
 
 # Define diatonic TRIADS and seventh chords in C major
 TRIADS = {
@@ -178,3 +179,31 @@ def walk_translator(walkies, chords):
         translation[step] = chords[step]
 
     return translation
+
+def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords):
+    beat_length_ticks = ticks_per_beat
+    mid = mido.MidiFile(ticks_per_beat=ticks_per_beat)
+    track = mido.MidiTrack()
+    mid.tracks.append(track)
+
+    # Set tempo
+    tempo = mido.bpm2tempo(bpm)
+    track.append(mido.MetaMessage('set_tempo', tempo=tempo))
+
+    # Map your 0-11 numbers to MIDI notes (root octave 4 = 60)
+    ROOT_NOTE = root_note
+
+    for chord_name, chord_intervals in walk_chords.items():
+        chord_notes = [(ROOT_NOTE + interval) for interval in chord_intervals]
+
+        # Note on
+        for note in chord_notes:
+            track.append(mido.Message('note_on', note=note, velocity=64, time=0))
+
+        # Note off after 1 beat
+        for note in chord_notes:
+            track.append(mido.Message('note_off', note=note, velocity=64, time=beat_length_ticks))
+
+    # Save MIDI
+    mid.save('random_walk.mid')
+    print("MIDI file saved as random_walk.mid")
