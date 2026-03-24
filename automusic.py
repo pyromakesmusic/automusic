@@ -180,7 +180,7 @@ def walk_translator(walkies, chords):
 
     return translation
 
-def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords):
+def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords, filename):
     beat_length_ticks = ticks_per_beat
     mid = mido.MidiFile(ticks_per_beat=ticks_per_beat)
     track = mido.MidiTrack()
@@ -205,5 +205,5 @@ def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords):
             track.append(mido.Message('note_off', note=note, velocity=64, time=beat_length_ticks))
 
     # Save MIDI
-    mid.save('random_walk.mid')
-    print("MIDI file saved as random_walk.mid")
+    mid.save(filename)
+    print(f"MIDI file saved as {filename}")
