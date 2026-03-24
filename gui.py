@@ -3,6 +3,7 @@ import automusic as amsc
 
 # Standard libraries imports
 import tkinter as tk
+from tkinter import filedialog
 from tkinter import ttk
 import pandas as pd
 import random
@@ -62,9 +63,15 @@ def on_generate():
 
     # need to figure out how to select a random node
     start_node = random.choice(list(graf.nodes))
-    walk = amsc.random_walk(graf, start_node, num_chords)
+    walk = amsc.walk_translator(amsc.random_walk(graf, start_node, num_chords), mode_chords)
 
-    print("Random Walk: " + str(amsc.walk_translator(walk, mode_chords)))
+    print("Random Walk: " + str(walk))
+
+    if filename_var and save_folder:
+        print(type(walk))
+        print(walk)
+        amsc.midi_stepper(bpm=120, ticks_per_beat=480, root_note=60, walk_chords=walk, save_folder=save_folder,
+                          filename_var=filename_var)
 
 # Create the main tkinter window
 root = tk.Tk()
@@ -72,7 +79,7 @@ root.title("Chord Generator")
 
 # File saving variables
 filename_var = tk.StringVar(value="random_walk")
-save_folder = tk.filedialog.askdirectory()
+save_folder = filedialog.askdirectory()
 
 # Variables for user selections
 key_var = tk.StringVar()
