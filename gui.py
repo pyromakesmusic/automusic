@@ -42,18 +42,20 @@ def on_generate():
 
     # Generate the chords for the mode by starting from the scale degree
     mode_chords = {}
-    for degree in range(len(transposed_mode)):
-        scale_degree = transposed_mode[degree]
 
-        # Iterate through each selected chord dictionary
-        for chord_dict in selected_chords_dicts:  # This list contains the selected chord dictionaries (TRIADS, SEVENTHS, etc.)
-            chord_key = list(chord_dict.keys())[degree]  # Get the chord corresponding to this scale degree
+    for degree, scale_degree in enumerate(transposed_mode):
+        for chord_dict in selected_chords_dicts:
+            chord_key = list(chord_dict.keys())[degree]
 
-            if chord_key in chord_dict:  # Check if the chord exists in the current dictionary
-                chord_intervals = chord_dict[chord_key]  # Get the intervals for the chord (e.g., [0, 4, 7] for a triad)
-                chord_notes = [(scale_degree + interval) % 12 for interval in
-                               chord_intervals]  # Generate the chord notes
-                mode_chords[chord_key] = chord_notes  # Add the chord notes to the mode_chords list
+            if chord_key in chord_dict:
+                chord_intervals = chord_dict[chord_key]
+
+                chord_notes = [
+                    (music_key + interval) % 12
+                    for interval in chord_intervals
+                ]
+
+                mode_chords[chord_key] = chord_notes
 
 
     graf = amsc.create_shared_notes_graph(mode_chords)

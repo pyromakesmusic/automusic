@@ -115,6 +115,8 @@ KEY_OPTIONS = [
     "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
 ]
 
+DEGREES = ["I", "ii", "iii", "IV", "V", "vi", "vii"]
+
 def create_shared_notes_graph(chords):
     """
     Create a graph where nodes represent chords, and edges are weighted
