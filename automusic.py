@@ -178,9 +178,9 @@ def random_walk(graph, start_node, num_steps=10):
     return walk
 
 def walk_translator(walkies, chords):
-    translation = {}
+    translation = []
     for step in walkies:
-        translation[step] = chords[step]
+        translation.append((step, chords[step]))
 
     return translation
 
@@ -205,7 +205,7 @@ def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords, save_folder, filen
     # Map your 0-11 numbers to MIDI notes (root octave 4 = 60)
     ROOT_NOTE = root_note
 
-    for chord_name, chord_intervals in walk_chords.items():
+    for chord_name, chord_intervals in walk_chords:
         chord_notes = [(ROOT_NOTE + interval) for interval in chord_intervals]
 
         # Note on
