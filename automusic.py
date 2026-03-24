@@ -210,10 +210,12 @@ def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords, save_folder, filen
         for note in chord_notes:
             track.append(mido.Message('note_on', note=note, velocity=64, time=0))
 
-        # Note off after 1 beat
-        for note in chord_notes:
-            track.append(mido.Message('note_off', note=note, velocity=64, time=beat_length_ticks))
+        # Delay happens once here
+        track.append(mido.Message('note_off', note=chord_notes[0], velocity=64, time=beat_length_ticks))
 
+        # Remaining note_offs
+        for note in chord_notes[1:]:
+            track.append(mido.Message('note_off', note=note, velocity=64, time=0))
     # Save MIDI
     mid.save(full_path)
     print(f"MIDI file saved as {filename_input}")
