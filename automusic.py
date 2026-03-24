@@ -1,7 +1,9 @@
 import random
+import os
 import networkx as nx
 import matplotlib.pyplot as plt
 import mido
+
 
 # Define diatonic TRIADS and seventh chords in C major
 TRIADS = {
@@ -180,7 +182,15 @@ def walk_translator(walkies, chords):
 
     return translation
 
-def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords, filename):
+def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords, save_folder, filename_var):
+    filename_input = filename_var.get().strip()
+
+    # Ensure it has .mid extension
+    if not filename_input.endswith(".mid"):
+        filename_input += ".mid"
+
+    full_path = os.path.join(save_folder, filename_input)
+
     beat_length_ticks = ticks_per_beat
     mid = mido.MidiFile(ticks_per_beat=ticks_per_beat)
     track = mido.MidiTrack()
@@ -205,5 +215,5 @@ def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords, filename):
             track.append(mido.Message('note_off', note=note, velocity=64, time=beat_length_ticks))
 
     # Save MIDI
-    mid.save(filename)
-    print(f"MIDI file saved as {filename}")
+    mid.save(full_path)
+    print(f"MIDI file saved as {filename_input}")

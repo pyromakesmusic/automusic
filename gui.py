@@ -70,6 +70,10 @@ def on_generate():
 root = tk.Tk()
 root.title("Chord Generator")
 
+# File saving variables
+filename_var = tk.StringVar(value="random_walk")
+save_folder = tk.filedialog.askdirectory()
+
 # Variables for user selections
 key_var = tk.StringVar()
 mode_var = tk.StringVar()
@@ -124,6 +128,15 @@ sus2_checkbox.grid(row=6, column=0, sticky="w")
 
 sus4_checkbox = tk.Checkbutton(root, text="Suspended 4", variable=sus4_var)
 sus4_checkbox.grid(row=7, column=0, sticky="w")
+
+filename_label = ttk.Label(root, text="Filename:")
+filename_label.grid(row=9, column=0, padx=5, pady=5, sticky="w")
+
+filename_entry = ttk.Entry(root, textvariable=filename_var, width=20)
+filename_entry.grid(row=9, column=1, padx=5, pady=5, sticky="w")
+
+save_path_label = ttk.Label(root, text=f"Saving to: {save_folder}")
+save_path_label.grid(row=10, column=0, columnspan=2, sticky="w")
 
 
 # Generate button
