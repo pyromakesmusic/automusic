@@ -6,13 +6,21 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
 import pandas as pd
+import matplotlib.pyplot as plt
 import random
+
+def on_closing():
+    plt.close('all')
+    root.destroy()
 
 def on_generate():
     """Function to handle the 'Generate' button click."""
     selected_key = key_var.get()
     selected_mode = mode_var.get()
     num_chords = num_chords_var.get()
+    bpm = bpm_var.get()
+    octave = octave_var.get()
+    root_note = (octave * 12) + 12
 
     music_key = amsc.note_to_number(selected_key)
     mode_numbers = amsc.DIATONIC_MODES[selected_mode]
@@ -72,8 +80,8 @@ def on_generate():
     if filename_var and save_folder:
         print(type(walk))
         print(walk)
-        amsc.midi_stepper(bpm=120, ticks_per_beat=480, root_note=60, walk_chords=walk, save_folder=save_folder,
-                          filename_var=filename_var)
+        amsc.midi_stepper(bpm=bpm, root_note=root_note, walk_chords=walk, save_folder=save_folder,
+                          filename=filename_var.get(), ticks_per_beat=480)
 
 # Create the main tkinter window
 root = tk.Tk()
@@ -87,6 +95,8 @@ save_folder = filedialog.askdirectory()
 key_var = tk.StringVar()
 mode_var = tk.StringVar()
 num_chords_var = tk.IntVar(value=4)
+octave_var = tk.IntVar(value=4)
+bpm_var = tk.IntVar(value=120)
 
 
 # Chord type checkboxes
@@ -121,6 +131,23 @@ num_chords_spinbox = ttk.Spinbox(
 )
 num_chords_spinbox.grid(row=2, column=1, padx=5, pady=5, sticky="w")
 
+# BPM selection
+bpm_label = ttk.Label(root, text="BPM:")
+bpm_label.grid(row=8, column=0, padx=5, pady=5, sticky="w")
+
+bpm_spinbox = ttk.Spinbox(
+    root, from_=40, to=240, textvariable=bpm_var, width=5
+)
+bpm_spinbox.grid(row=8, column=1, padx=5, pady=5, sticky="w")
+
+# Octave selection
+octave_label = ttk.Label(root, text="Octave:")
+octave_label.grid(row=11, column=0, padx=5, pady=5, sticky="w")
+
+octave_spinbox = ttk.Spinbox(
+    root, from_=1, to=7, textvariable=octave_var, width=5
+)
+octave_spinbox.grid(row=11, column=1, padx=5, pady=5, sticky="w")
 
 # Add checkboxes for chord types
 triads_checkbox = tk.Checkbutton(root, text="Triads", variable=triads_var)
@@ -152,5 +179,6 @@ save_path_label.grid(row=10, column=0, columnspan=2, sticky="w")
 generate_button = ttk.Button(root, text="Generate", command=on_generate)
 generate_button.grid(row=8, column=3, rowspan=3, columnspan=4, sticky="w")
 
+root.protocol("WM_DELETE_WINDOW", on_closing)
 # Run the tkinter event loop
 root.mainloop()

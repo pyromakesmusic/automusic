@@ -184,8 +184,8 @@ def walk_translator(walkies, chords):
 
     return translation
 
-def midi_stepper(bpm, ticks_per_beat, root_note, walk_chords, save_folder, filename_var):
-    filename_input = filename_var.get().strip()
+def midi_stepper(bpm, root_note, walk_chords, save_folder, filename, ticks_per_beat=480):
+    filename_input = filename.strip()
 
     # Ensure it has .mid extension
     if not filename_input.endswith(".mid"):
