@@ -6,15 +6,46 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
 import pandas as pd
+import sys
 import matplotlib.pyplot as plt
 import random
+import json
+import os
+
+CONFIG_FILE = os.path.join(os.path.expanduser("~"), ".automusic_config.json")
+
+# Default save file
+def save_config(folder):
+    config = {"save_folder": folder}
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(config, f)
+
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as f:
+            config = json.load(f)
+        return config.get("save_folder", "")
+    return ""
 
 def on_closing():
     plt.close('all')
     root.destroy()
+    sys.exit()
 
 def on_generate():
     """Function to handle the 'Generate' button click."""
+    global save_folder
+
+    # Ask for folder if not yet selected
+    if not save_folder:
+        save_folder = filedialog.askdirectory(title="Select save folder")
+        if save_folder:
+            save_config(save_folder)
+            save_path_label.config(text=f"Saving to: {save_folder}")
+        else:
+            # User canceled
+            return
+
     selected_key = key_var.get()
     selected_mode = mode_var.get()
     num_chords = num_chords_var.get()
@@ -89,7 +120,7 @@ root.title("Chord Generator")
 
 # File saving variables
 filename_var = tk.StringVar(value="random_walk")
-save_folder = filedialog.askdirectory()
+save_folder = load_config()
 
 # Variables for user selections
 key_var = tk.StringVar()
@@ -171,7 +202,7 @@ filename_label.grid(row=9, column=0, padx=5, pady=5, sticky="w")
 filename_entry = ttk.Entry(root, textvariable=filename_var, width=20)
 filename_entry.grid(row=9, column=1, padx=5, pady=5, sticky="w")
 
-save_path_label = ttk.Label(root, text=f"Saving to: {save_folder}")
+save_path_label = ttk.Label(root, text=f"Saving to: {save_folder or 'Not selected'}")
 save_path_label.grid(row=10, column=0, columnspan=2, sticky="w")
 
 
