@@ -184,6 +184,147 @@ def walk_translator(walkies, chords):
 
     return translation
 
+def trill(main_note, upper_note, total_ticks, repetitions=4):
+    """
+    Rapid alternation between main note and upper note.
+    Returns list of (note, duration) tuples.
+    """
+    pattern = []
+    total_notes = repetitions * 2
+    step = max(1, total_ticks // total_notes)
+
+    for i in range(total_notes):
+        note = main_note if i % 2 == 0 else upper_note
+        pattern.append((note, step))
+
+    return pattern
+
+
+def mordent(main_note, lower_note, total_ticks):
+    """
+    Main -> lower neighbor -> main
+    """
+    step = max(1, total_ticks // 3)
+
+    return [
+        (main_note, step),
+        (lower_note, step),
+        (main_note, total_ticks - 2 * step)
+    ]
+
+
+def turn(main_note, upper_note, lower_note, total_ticks):
+    """
+    Upper -> main -> lower -> main
+    """
+    step = max(1, total_ticks // 4)
+
+    return [
+        (upper_note, step),
+        (main_note, step),
+        (lower_note, step),
+        (main_note, total_ticks - 3 * step)
+    ]
+
+
+def appoggiatura(grace_note, main_note, total_ticks):
+    """
+    Leaning note that takes emphasis/time from principal note.
+    Longer grace note than acciaccatura.
+    """
+    grace = max(1, total_ticks // 2)
+
+    return [
+        (grace_note, grace),
+        (main_note, total_ticks - grace)
+    ]
+
+
+def acciaccatura(grace_note, main_note, total_ticks):
+    """
+    Very short crushed grace note before principal note.
+    """
+    grace = max(1, total_ticks // 8)
+
+    return [
+        (grace_note, grace),
+        (main_note, total_ticks - grace)
+    ]
+def melody_stepper(
+    bpm,
+    root_note,
+    walk_chords,
+    save_folder,
+    filename,
+    notes_per_chord=4,
+    ticks_per_beat=480,
+    octave=12
+):
+    """
+    Create a melody MIDI file from an existing chord progression.
+
+    For each chord in walk_chords, randomly selects notes from that chord
+    and plays them one at a time.
+
+    Parameters:
+        bpm (int): Tempo.
+        root_note (int): MIDI root note (e.g. 60 = middle C).
+        walk_chords (list): Output from walk_translator().
+        save_folder (str): Folder to save MIDI.
+        filename (str): MIDI filename.
+        notes_per_chord (int): Melody notes played during each chord.
+        ticks_per_beat (int): MIDI resolution.
+        octave (int): Melody octave offset above chords.
+    """
+
+    filename_input = filename.strip()
+
+    if not filename_input.endswith(".mid"):
+        filename_input += ".mid"
+
+    full_path = os.path.join(save_folder, filename_input)
+
+    mid = mido.MidiFile(ticks_per_beat=ticks_per_beat)
+    track = mido.MidiTrack()
+    mid.tracks.append(track)
+
+    tempo = mido.bpm2tempo(bpm)
+    track.append(mido.MetaMessage('set_tempo', tempo=tempo))
+
+    note_length = ticks_per_beat // notes_per_chord
+
+    for chord_name, chord_intervals in walk_chords:
+
+        # Convert chord notes into MIDI pitches
+        chord_notes = [
+            root_note + interval + octave
+            for interval in chord_intervals
+        ]
+
+        for _ in range(notes_per_chord):
+            melody_note = random.choice(chord_notes)
+
+            track.append(
+                mido.Message(
+                    'note_on',
+                    note=melody_note,
+                    velocity=80,
+                    time=0
+                )
+            )
+
+            track.append(
+                mido.Message(
+                    'note_off',
+                    note=melody_note,
+                    velocity=80,
+                    time=note_length
+                )
+            )
+
+    mid.save(full_path)
+    print(f"Melody MIDI file saved as {filename_input}")
+
 def midi_stepper(bpm, root_note, walk_chords, save_folder, filename, ticks_per_beat=480):
     filename_input = filename.strip()
 
